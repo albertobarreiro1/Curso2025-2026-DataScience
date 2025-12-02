@@ -1,0 +1,62 @@
+PREFIX ns: <http://smartcity.es/alquiler#>
+
+# Query 1: Barrios con renta media > 1000
+
+SELECT ?barrio
+WHERE {
+    ?reg ns:barrio ?barrio .
+    ?reg ns:renta_med ?renta .
+    FILTER(?renta > 1000)
+}
+
+# Query 2: Barrios con media de 2 baños y más de 80 m2
+
+SELECT ?barrio
+WHERE {
+    ?reg ns:barrio ?barrio .
+    ?reg ns:banyos 2 .
+    ?reg ns:m2 ?m2 .
+    FILTER(?m2 > 80)
+}
+
+# Query 3: Precio €/m² de viviendas del trimestre 3
+SELECT ?precio
+WHERE {
+    ?reg ns:trimestre 3 .
+    ?reg ns:euros_m2 ?precio .
+}
+
+# Query 4: Barrios con renta mínima < 500
+SELECT DISTINCT ?barrio
+WHERE {
+    ?reg ns:barrio ?barrio .
+    ?reg ns:renta_min ?rmin .
+    FILTER(?rmin < 500)
+}
+
+# Query 5: Zonas más caras (Top 5 Renta Máxima)
+SELECT ?barrio ?renta_max
+WHERE {
+    ?reg ns:barrio ?barrio .
+    ?reg ns:renta_max ?renta_max .
+}
+ORDER BY DESC(?renta_max)
+LIMIT 5
+
+# Query 6: Obtener la renta media de todos los barrios en el año 2019
+SELECT ?barrio ?renta
+WHERE {
+    ?reg ns:anyo 2019 .
+    ?reg ns:barrio ?barrio .
+    ?reg ns:renta_med ?renta .
+}
+ORDER BY DESC(?renta)
+
+#Query 7: Barrios con viviendas grandes (>120 m²) pero con pocos dormitorios (<3)
+SELECT ?barrio ?m2 ?dormitorios
+WHERE {
+    ?reg ns:barrio ?barrio .
+    ?reg ns:m2 ?m2 .
+    ?reg ns:dormitorios ?dormitorios .
+    FILTER(?m2 > 120 && ?dormitorios < 3)
+}

@@ -1,0 +1,72 @@
+@prefix mod: <https://w3id.org/mod#> .
+@prefix ns: <http://www.owl-ontologies.com/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ns: a owl:Ontology ;
+    mod:createdWith <https://chowlk.linkeddata.es/> .
+
+ns:isNamed a owl:DatatypeProperty ;
+    rdfs:label "is named" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:isFinancedby a owl:DatatypeProperty ;
+    rdfs:label "is financedby" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:isType a owl:DatatypeProperty ;
+    rdfs:label "is type" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:hasBeds a owl:DatatypeProperty ;
+    rdfs:label "has beds" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:integer .
+
+ns:isLocatedin a owl:DatatypeProperty ;
+    rdfs:label "is locatedin" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:wasCreatedin a owl:DatatypeProperty ;
+    rdfs:label "was createdin" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:dateTime .
+
+ns:estaEnbarrio a owl:DatatypeProperty ;
+    rdfs:label "esta enbarrio" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:tieneCodigodeBarrio a owl:DatatypeProperty ;
+    rdfs:label "tiene codigode barrio" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:integer .
+
+ns:tieneCoddistBarrio a owl:DatatypeProperty ;
+    rdfs:label "tiene coddist barrio" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:integer .
+
+ns:tieneCodigodistrito a owl:DatatypeProperty ;
+    rdfs:label "tiene codigodistrito" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:integer .
+
+ns:hasShape a owl:DatatypeProperty ;
+    rdfs:label "has shape" ;
+    rdfs:domain ns:Hospital ;
+    rdfs:range xsd:string .
+
+ns:Hospital a owl:Class ;
+    rdfs:label "Hospital" .
+
+ns:Barrio a owl:Class ;
+    rdfs:label "Barrio" .
+
+ns:Camas a owl:Class ;
+    rdfs:label "Camas" .

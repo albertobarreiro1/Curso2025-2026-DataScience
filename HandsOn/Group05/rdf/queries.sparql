@@ -1,0 +1,175 @@
+PREFIX aq:      <http://linkeddata.grup05.es/CalidadAireMadrid/ontology/AirQualityOntology#>
+PREFIX schema:  <http://schema.org/>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+PREFIX res:     <http://linkeddata.grup05.es/CalidadAireMadrid/resource/>
+
+############################################################
+# 1) Ver cuántas mediciones, ubicaciones y contaminantes hay
+############################################################
+
+SELECT (COUNT(DISTINCT ?medicion) AS ?numMediciones)
+       (COUNT(DISTINCT ?ubicacion) AS ?numUbicaciones)
+       (COUNT(DISTINCT ?contaminante) AS ?numContaminantes)
+WHERE {
+  OPTIONAL { ?medicion a aq:Medicion . }
+  OPTIONAL { ?ubicacion a aq:Ubicacion . }
+  OPTIONAL { ?contaminante a aq:Contaminante . }
+}
+
+############################################################
+# 2) Listar algunas mediciones con sus datos básicos
+#    (para compararlas con el CSV)
+############################################################
+
+SELECT ?medicion ?id ?fechaHora ?timezone ?ubicacion ?contaminante
+WHERE {
+  ?medicion a aq:Medicion ;
+            aq:tieneId ?id ;
+            aq:fechaHora ?fechaHora ;
+            aq:tieneZonaHoraria ?timezone ;
+            aq:enUbicacion ?ubicacion ;
+            aq:mideParametro ?contaminante .
+}
+ORDER BY ?medicion
+LIMIT 20
+
+############################################################
+# 3) Mediciones que NO tienen ubicación o NO tienen contaminante
+#    (debería devolver 0 filas si todo está bien)
+############################################################
+
+SELECT ?medicion
+WHERE {
+  ?medicion a aq:Medicion .
+  FILTER NOT EXISTS { ?medicion aq:enUbicacion ?u }
+    UNION
+  FILTER NOT EXISTS { ?medicion aq:mideParametro ?c }
+}
+
+############################################################
+# 4) Mediciones sin fechaHora o sin zona horaria
+#    (también debería devolver 0 filas idealmente)
+############################################################
+
+SELECT ?medicion
+WHERE {
+  ?medicion a aq:Medicion .
+  FILTER NOT EXISTS { ?medicion aq:fechaHora ?fh }
+    UNION
+  FILTER NOT EXISTS { ?medicion aq:tieneZonaHoraria ?tz }
+}
+
+############################################################
+# 5) Contaminantes con su valor y unidad distintos
+#    (agrupados por tipo de contaminante)
+############################################################
+
+SELECT ?contaminante ?label (SAMPLE(?valor) AS ?unValorEjemplo) (SAMPLE(?unidad) AS ?unaUnidadEjemplo)
+WHERE {
+  ?contaminante a aq:Contaminante ;
+                rdfs:label ?label ;
+                aq:valor ?valor ;
+                aq:unidad ?unidad .
+}
+GROUP BY ?contaminante ?label
+ORDER BY ?label
+
+############################################################
+# 6) Comprobar que todas las instancias tienen tipo (rdf:type)
+#    (individuos sin tipo => posible error de mapeo)
+############################################################
+
+SELECT ?recurso
+WHERE {
+  ?recurso ?p ?o .
+  FILTER NOT EXISTS { ?recurso a ?tipo }
+}
+LIMIT 50
+
+############################################################
+# 7) Número de mediciones por contaminante
+############################################################
+
+SELECT ?contaminante ?label (COUNT(DISTINCT ?medicion) AS ?numMediciones)
+WHERE {
+  ?medicion a aq:Medicion ;
+            aq:mideParametro ?contaminante .
+  OPTIONAL { ?contaminante rdfs:label ?label }
+}
+GROUP BY ?contaminante ?label
+ORDER BY DESC(?numMediciones)
+
+############################################################
+# 8) Número de mediciones por ubicación
+############################################################
+
+SELECT ?ubicacion ?label (COUNT(DISTINCT ?medicion) AS ?numMediciones)
+WHERE {
+  ?medicion a aq:Medicion ;
+            aq:enUbicacion ?ubicacion .
+  OPTIONAL { ?ubicacion rdfs:label ?label }
+}
+GROUP BY ?ubicacion ?label
+ORDER BY DESC(?numMediciones)
+
+############################################################
+# 9) Valores mínimo y máximo de cada contaminante
+############################################################
+
+SELECT ?contaminante ?label
+       (MIN(?valor) AS ?minValor)
+       (MAX(?valor) AS ?maxValor)
+WHERE {
+  ?contaminante a aq:Contaminante ;
+                aq:valor ?valor .
+  OPTIONAL { ?contaminante rdfs:label ?label }
+}
+GROUP BY ?contaminante ?label
+ORDER BY ?label
+
+############################################################
+# 10) Mediciones para una ubicación concreta y contaminante concreto
+#     (sustituye el literal de ?nombreUbicacion y ?tipoParametro)
+############################################################
+
+SELECT ?medicion ?id ?fechaHora ?valor ?unidad
+WHERE {
+  ?ubicacion a aq:Ubicacion ;
+             rdfs:label ?nombreUbicacion .
+  FILTER (STR(?nombreUbicacion) = "Estación Plaza del Carmen")
+
+  ?contaminante a aq:Contaminante ;
+                rdfs:label ?tipoParametro .
+  FILTER (STR(?tipoParametro) = "Dióxido de nitrógeno (NO₂)")
+
+  ?medicion a aq:Medicion ;
+            aq:tieneId ?id ;
+            aq:fechaHora ?fechaHora ;
+            aq:enUbicacion ?ubicacion ;
+            aq:mideParametro ?contaminante .
+
+  # Valor y unidad vienen del contaminante según tu ontología
+  ?contaminante aq:valor ?valor ;
+                aq:unidad ?unidad .
+}
+ORDER BY ?fechaHora
+
+############################################################
+# 11) ASK: ¿existe alguna medición sin zona horaria?
+#      (debería dar false si todo está fino)
+############################################################
+
+ASK {
+  ?m a aq:Medicion .
+  FILTER NOT EXISTS { ?m aq:tieneZonaHoraria ?tz }
+}
+
+############################################################
+# 12) ASK: ¿todas las URIs de mediciones siguen el patrón /Medicion/…?
+############################################################
+
+ASK {
+  ?m a aq:Medicion .
+  FILTER( !STRSTARTS(STR(?m), STR(res:Medicion/)) )
+}

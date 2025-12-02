@@ -1,0 +1,121 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix transit: <http://vocab.org/transit/terms/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix vocab: <http://example.org#> .
+@base <http://example.com/ns#>.
+
+<#TriplesMap1> a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "datsetbarrios-updated.csv" ;
+    rml:referenceFormulation ql:CSV 
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/observation/{barrio}/{anyo}/{trimestre}";
+    rr:class vocab:HousingObservation
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:year;
+    rr:objectMap [
+      rml:reference "anyo";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:quarter;
+    rr:objectMap [
+      rml:reference "trimestre";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:numberOfDwellings;
+    rr:objectMap [
+      rml:reference "num_viviendas";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:sizeInMeters;
+    rr:objectMap [
+      rml:reference "metros_2";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:bedrooms;
+    rr:objectMap [
+      rml:reference "dormitorios"
+      # Nota: Sin tipo decimal aqui porque el CSV tiene comas
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:bathrooms;
+    rr:objectMap [
+      rml:reference "banyos"
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:minRent;
+    rr:objectMap [
+      rml:reference "renta_min";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:avgRent;
+    rr:objectMap [
+      rml:reference "renta_media";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:maxRent;
+    rr:objectMap [
+      rml:reference "renta_max";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:pricePerM2;
+    rr:objectMap [
+      rml:reference "euros_m2"
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:stdDev;
+    rr:objectMap [
+      rml:reference "desv_tipica";
+      rr:datatype xsd:integer
+    ]
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate vocab:relation;
+    rr:objectMap [
+      rr:parentTriplesMap <#TriplesMap2>
+    ]
+  ] .
+
+<#TriplesMap2> a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "datsetbarrios-updated.csv" ;
+    rml:referenceFormulation ql:CSV 
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/neighborhood/{barrio}";
+    rr:class vocab:Neighborhood
+  ].

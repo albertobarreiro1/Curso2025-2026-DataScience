@@ -1,0 +1,82 @@
+prefixes:
+  rr:   http://www.w3.org/ns/r2rml#
+  rml:  http://semweb.mmlab.be/ns/rml#
+  ql:   http://semweb.mmlab.be/ns/ql#
+  aq:   https://carloscumbrado.github.io/HandsOn/group07/ontology/airquality#
+  xsd:  http://www.w3.org/2001/XMLSchema#
+  rdf:  http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+
+mappings:
+
+  Stations:
+    sources:
+      - [../csv/air_quality_madrid_2024-updated.csv~csv]
+    s: https://carloscumbrado.github.io/HandsOn/group07/resource/Station/$(stationCode)
+    po:
+      - [a, aq:Station]
+      - [rdfs:label, $(stationCode), xsd:string]
+
+  Pollutants:
+    sources:
+      - [../csv/air_quality_madrid_2024-updated.csv~csv]
+    s: https://carloscumbrado.github.io/HandsOn/group07/resource/Pollutant/$(pollutantCode)
+    po:
+      - [a, aq:Pollutant]
+      - [rdfs:label, $(pollutantCode), xsd:string]
+
+  Observations:
+    sources:
+      - [../csv/air_quality_madrid_2024-updated.csv~csv]
+    s: https://carloscumbrado.github.io/HandsOn/group07/resource/Observation/$(observationID)
+    po:
+      - [a, aq:AirQualityObservation]
+      - [rdfs:label, $(observationID), xsd:string]
+
+      # Date: YYYY-MM-01
+      - [aq:hasDate, "$(year)-$(month)-01", xsd:date]
+
+      # Unit (constant)
+      - [aq:hasUnit, "µg/m³", xsd:string]
+
+      # Link to Station and Pollutant
+      - p: aq:hasStation
+        o:
+          - mapping: Stations
+
+      - p: aq:measuresPollutant
+        o:
+          - mapping: Pollutants
+
+      # All daily values
+      - [aq:hasValue, $(D01), xsd:float]
+      - [aq:hasValue, $(D02), xsd:float]
+      - [aq:hasValue, $(D03), xsd:float]
+      - [aq:hasValue, $(D04), xsd:float]
+      - [aq:hasValue, $(D05), xsd:float]
+      - [aq:hasValue, $(D06), xsd:float]
+      - [aq:hasValue, $(D07), xsd:float]
+      - [aq:hasValue, $(D08), xsd:float]
+      - [aq:hasValue, $(D09), xsd:float]
+      - [aq:hasValue, $(D10), xsd:float]
+      - [aq:hasValue, $(D11), xsd:float]
+      - [aq:hasValue, $(D12), xsd:float]
+      - [aq:hasValue, $(D13), xsd:float]
+      - [aq:hasValue, $(D14), xsd:float]
+      - [aq:hasValue, $(D15), xsd:float]
+      - [aq:hasValue, $(D16), xsd:float]
+      - [aq:hasValue, $(D17), xsd:float]
+      - [aq:hasValue, $(D18), xsd:float]
+      - [aq:hasValue, $(D19), xsd:float]
+      - [aq:hasValue, $(D20), xsd:float]
+      - [aq:hasValue, $(D21), xsd:float]
+      - [aq:hasValue, $(D22), xsd:float]
+      - [aq:hasValue, $(D23), xsd:float]
+      - [aq:hasValue, $(D24), xsd:float]
+      - [aq:hasValue, $(D25), xsd:float]
+      - [aq:hasValue, $(D26), xsd:float]
+      - [aq:hasValue, $(D27), xsd:float]
+      - [aq:hasValue, $(D28), xsd:float]
+      - [aq:hasValue, $(D29), xsd:float]
+      - [aq:hasValue, $(D30), xsd:float]
+      - [aq:hasValue, $(D31), xsd:float]

@@ -1,0 +1,269 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix aq:   <https://carloscumbrado.github.io/HandsOn/group07/ontology/airquality#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# TriplesMap: Stations
+
+<#Stations> a rr:TriplesMap ;
+  rml:logicalSource [
+    rml:source "csv/air_quality_madrid_2024-updated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ] ;
+
+  rr:subjectMap [
+    rr:template "https://carloscumbrado.github.io/HandsOn/group07/resource/Station/{stationCode}" ;
+    rr:class aq:Station ;
+    rr:termType rr:IRI
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rml:reference "stationCode" ;
+      rr:termType rr:Literal ;
+      rr:datatype xsd:string
+    ]
+  ] .
+
+# TriplesMap: Pollutants
+
+<#Pollutants> a rr:TriplesMap ;
+  rml:logicalSource [
+    rml:source "csv/air_quality_madrid_2024-updated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ] ;
+
+  rr:subjectMap [
+    rr:template "https://carloscumbrado.github.io/HandsOn/group07/resource/Pollutant/{pollutantCode}" ;
+    rr:class aq:Pollutant ;
+    rr:termType rr:IRI
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rml:reference "pollutantCode" ;
+      rr:termType rr:Literal ;
+      rr:datatype xsd:string
+    ]
+  ] .
+
+# TriplesMap: Air Quality Observations (monthly)
+
+<#Observations> a rr:TriplesMap ;
+  rml:logicalSource [
+    rml:source "csv/air_quality_madrid_2024-updated.csv" ;
+    rml:referenceFormulation ql:CSV
+  ] ;
+
+  rr:subjectMap [
+    rr:template "https://carloscumbrado.github.io/HandsOn/group07/resource/Observation/{observationID}" ;
+    rr:class aq:AirQualityObservation ;
+    rr:termType rr:IRI
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rml:reference "observationID" ;
+      rr:termType rr:Literal ;
+      rr:datatype xsd:string
+    ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasDate ;
+    rr:objectMap [
+      rr:template "{year}-{month}-01" ;
+      rr:termType rr:Literal ;
+      rr:datatype xsd:date
+    ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasUnit ;
+    rr:objectMap [
+      rr:constant "ug/m3" ;
+      rr:termType rr:Literal ;
+      rr:datatype xsd:string
+    ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasStation ;
+    rr:objectMap [
+      rr:parentTriplesMap <#Stations>
+    ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:measuresPollutant ;
+    rr:objectMap [
+      rr:parentTriplesMap <#Pollutants>
+    ]
+  ] ;
+
+  # DAILY VALUES (D01..D31)
+
+  # I generate these with consistent structure:
+  # rr:termType rr:Literal ; rr:datatype xsd:float
+  # exactly as Morph-KGC requires.
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D01" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D02" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D03" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D04" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D05" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D06" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D07" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D08" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D09" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D10" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D11" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D12" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D13" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D14" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D15" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D16" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D17" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D18" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D19" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D20" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D21" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D22" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D23" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D24" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D25" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D26" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D27" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D28" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D29" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D30" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate aq:hasValue ;
+    rr:objectMap [ rml:reference "D31" ; rr:termType rr:Literal ; rr:datatype xsd:float ]
+  ] .

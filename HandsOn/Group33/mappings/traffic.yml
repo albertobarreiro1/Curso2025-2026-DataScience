@@ -1,0 +1,21 @@
+triples_maps:
+  - name: TriplesMapTraffic
+    source: csv/traffic.csv
+    subject_template: "http://example.org/group33/registro/{DIA}/{FEST}/{FSEN}"
+    class: Registro
+    predicates:
+      fecha: DIA
+      estacion: FEST
+      categoria: FSEN
+      hora1: HOR1
+      hora2: HOR2
+      hora3: HOR3
+      hora4: HOR4
+      hora5: HOR5
+      hora6: HOR6
+      hora7: HOR7
+      hora8: HOR8
+      hora9: HOR9
+      hora10: HOR10
+      hora11: HOR11
+      hora12: HOR12
